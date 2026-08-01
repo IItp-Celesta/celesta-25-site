@@ -152,7 +152,7 @@ export default function WorkshopRegistrationPage() {
               letterSpacing: "0.5px",
             }}
           >
-            Celesta 2026 Tech Workshop Series
+            Celesta 2026 Tech Workshop Series (22 & 23 August)
           </p>
         </header>
 

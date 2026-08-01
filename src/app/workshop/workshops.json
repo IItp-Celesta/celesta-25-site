@@ -17,36 +17,6 @@
       "img_src": "/images/workshop-images/app-dev.png",
       "banner_src": "/images/workshop-banners/app dev.jpeg",
       "register_link": "/workshop-registration"
-    },
-    {
-      "name": "Full Stack Development",
-      "img_src": "/images/workshop-images/gen-ai.png",
-      "banner_src": "/images/workshop-banners/genai.jpeg",
-      "register_link": "/workshop-registration"
-    },
-    {
-      "name": "Arduino Course",
-      "img_src": "/images/workshop-images/cyber-sec.png",
-      "banner_src": "/images/workshop-banners/hacking.jpeg",
-      "register_link": "/workshop-registration"
-    },
-    {
-      "name": "Autonomous Robotics",
-      "img_src": "/images/workshop-images/drone-tech.png",
-      "banner_src": "/images/workshop-banners/drone.jpeg",
-      "register_link": "/workshop-registration"
-    },
-    {
-      "name": "Generative AI",
-      "img_src": "/images/workshop-images/drone-tech.png",
-      "banner_src": "/images/workshop-banners/drone.jpeg",
-      "register_link": "/workshop-registration"
-    },
-    {
-      "name": "Internet of Things",
-      "img_src": "/images/workshop-images/drone-tech.png",
-      "banner_src": "/images/workshop-banners/drone.jpeg",
-      "register_link": "/workshop-registration"
     }
   ]
 }
