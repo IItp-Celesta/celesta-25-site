@@ -226,21 +226,6 @@ export default function RegistrationForm({ register, errors, watch }) {
             <option value="Drone Technology" style={{ color: "#000" }}>
               Drone Technology
             </option>
-            <option value="Full Stack Development" style={{ color: "#000" }}>
-              Full Stack Development
-            </option>
-            <option value="Arduino Course" style={{ color: "#000" }}>
-              Arduino Course
-            </option>
-            <option value="Autonomous Robotics" style={{ color: "#000" }}>
-              Autonomous Robotics
-            </option>
-            <option value="Generative AI" style={{ color: "#000" }}>
-              Generative AI
-            </option>
-            <option value="Internet of Things" style={{ color: "#000" }}>
-              Internet of Things
-            </option>
           </select>
         </div>
 
