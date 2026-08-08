@@ -100,7 +100,7 @@ export default function Home() {
             start: "top 90%",
             toggleActions: "play none none none",
           },
-        }
+        },
       );
     });
   }, []);
@@ -111,7 +111,7 @@ export default function Home() {
       gsap.fromTo(
         fadeRef.current,
         { y: 30, autoAlpha: 0 },
-        { y: 0, autoAlpha: 1, duration: 1.5, ease: "power2.out" }
+        { y: 0, autoAlpha: 1, duration: 1.5, ease: "power2.out" },
       );
     }
   }, []);
@@ -126,7 +126,7 @@ export default function Home() {
         if (isAnimating) return;
 
         const currentImg = document.querySelector(
-          `#performer-${idx}-img-current`
+          `#performer-${idx}-img-current`,
         );
         const nextImg = document.querySelector(`#performer-${idx}-img-next`);
 
@@ -194,7 +194,7 @@ export default function Home() {
             start: "top 80%",
             toggleActions: "play none none none",
           },
-        }
+        },
       );
     });
   }, [performers]);
@@ -250,8 +250,9 @@ export default function Home() {
 
               {/* Artist Name */}
               <div
-                className={`absolute inset-0 flex items-center z-20 px-4 sm:px-10 md:px-20 justify-${idx % 2 === 0 ? "start" : "end"
-                  }`}
+                className={`absolute inset-0 flex items-center z-20 px-4 sm:px-10 md:px-20 justify-${
+                  idx % 2 === 0 ? "start" : "end"
+                }`}
               >
                 <h2
                   id={`performer-name-${idx}`}
@@ -266,64 +267,33 @@ export default function Home() {
       </div>
 
       <div className={`w-full ${styles.background2} py-16 px-4 md:px-20`}>
-        <section className="max-w-5xl mx-auto text-center mb-16">
+        {/* Theme Announcement Section */}
 
-          {/* Small label */}
+        <section className="max-w-5xl mx-auto text-center mb-16 reveal-section">
+          {" "}
           <h3 className="text-white text-4xl uppercase text-center mb-8 state-wide">
-            Theme
+            {" "}
+            Theme{" "}
           </h3>
-
-          {/* Main theme title */}
-          <h2 className="text-white text-4xl md:text-5xl font-extrabold uppercase mb-6 bg-clip-text text-transparent bg-gradient-to-b from-white to-gray-400">
-            Reclaiming the Realms
+          <h2 className="text-white text-4xl md:text-6xl font-extrabold uppercase mb-6 bg-clip-text text-transparent bg-gradient-to-b from-white to-gray-400">
+            {" "}
+            To Be Announced{" "}
           </h2>
-
-          {/* Divider */}
-          <div className="w-24 h-[2px] mx-auto mb-6 bg-gradient-to-r from-transparent via-cyan-400 to-transparent"></div>
-
-          {/* Description */}
-          <div className="max-w-7xl mx-auto text-gray-200 text-base md:text-lg leading-relaxed text-justify relative clearfix px-4 md:px-10">
-
-            {/* Floated Image */}
-            <div className="float-none md:float-right md:ml-12 md:mb-6 w-full md:w-[45%] lg:w-[40%] flex justify-center md:block mb-8 md:mt-2">
-              <Image
-                src="/images/celesta-theme.png"
-                alt="Celesta Theme"
-                width={600}
-                height={600}
-                className="rounded-xl shadow-2xl object-cover hover:scale-105 transition-transform duration-500 w-full"
-              />
-            </div>
-
-            <div className="space-y-6">
-              <p>
-                “Reclaim” is a word rooted in Latin “reclamare” – to call back, to demand the return of what was lost. In this context, “reclaim” is not merely about retrieval, but returning and usage of lost wisdom by it’s rightful owners.
-              </p>
-              <p>
-                “Realms” denote sovereign territories, representing technology’s 5 sovereign domains; energy, memory, connection, creation, and logic. Here, they are represented by the realms of fire, water, air, earth, and aether, respectively.
-              </p>
-              <p>
-                This theme frames technology as a combination of elements that are to be reclaimed and reunited. Returning each realm to its rightful owner, and stripping the power away from whom it does not belong to.
-              </p>
-
-              <div className="pl-4 border-l-2 border-cyan-500/30">
-                <p className="mb-2">
-                  <span className="text-cyan-400 font-semibold">Restoration of knowledge:</span> Restoring ancient wisdom, applying it to our understanding of technology.
-                </p>
-                <p>
-                  <span className="text-cyan-400 font-semibold">Reuniting of Elements:</span> Reclaiming the realms under one person, and viewing the wholeness of technology comprised by those elements.
-                </p>
-              </div>
-            </div>
-          </div>
-
+          <div className="w-24 h-[2px] mx-auto mb-6 bg-gradient-to-r from-transparent via-cyan-400 to-transparent" />
+          <p className="text-gray-300 text-lg md:text-xl">
+            {" "}
+            Something exciting is coming. Stay tuned for the reveal.{" "}
+          </p>{" "}
         </section>
         <section className="max-w-7xl mx-auto mb-16 reveal-section">
           <h2 className="text-white text-4xl uppercase text-center mb-8 state-wide">
             Events
           </h2>
-
-          <Swiper
+          <p className="text-gray-100 text-lg md:text-xl">
+            {" "}
+            Incoming Soon....
+          </p>
+          {/* <Swiper
             modules={[Autoplay, Navigation]}
             spaceBetween={24}
             slidesPerView={1}
@@ -351,7 +321,7 @@ export default function Home() {
                 </div>
               </SwiperSlide>
             ))}
-          </Swiper>
+          </Swiper> */}
 
           {selectedEvent && (
             <EventModal
@@ -361,12 +331,16 @@ export default function Home() {
           )}
         </section>
 
-
         <section className="max-w-7xl mx-auto mb-16 reveal-section text-center">
           <h2 className="text-white text-4xl uppercase mb-8 state-wide">
             Official Merchandise
           </h2>
-          <div className="flex justify-center items-center gap-6">
+          <p className="text-gray-100 text-lg md:text-xl max-w-2xl leading-relaxed">
+            {" "}
+            Something special is in the making. <br /> Stay tuned for the
+            official CELESTA merchandise reveal.{" "}
+          </p>
+          {/* <div className="flex justify-center items-center gap-6">
             <Image
               src="/images/merch4.png"
               alt="merch-front"
@@ -395,7 +369,7 @@ export default function Home() {
               height={350}
               className="inline-block hover:scale-110 transition-transform duration-300"
             />
-          </div>
+          </div> */}
         </section>
 
         <section className="max-w-7xl mx-auto mb-16 reveal-section">
@@ -443,8 +417,6 @@ export default function Home() {
               )}
             </button>
           </div>
-
-
         </section>
       </div>
     </div>
