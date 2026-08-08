@@ -77,34 +77,9 @@ export default function WorkshopRegistrationPage() {
   };
 
   return (
-    // Outer Wrapper: Takes up full height, handles spacing from the global navbar
-    <div
-      style={{
-        backgroundImage: "url('/images/auth-backdrop.png')",
-        minHeight: "100vh",
-        padding: "100px 1rem 4rem 1rem",
-        fontFamily: "system-ui, sans-serif",
-        color: "#f8fafc",
-        position: "relative",
-        zIndex: 1,
-      }}
-    >
+    <div className="page-wrapper" style={{ backgroundImage: "url('/images/auth-backdrop.png')" }}>
       {/* Premium Glassmorphism Container */}
-      <div
-        style={{
-          maxWidth: "850px",
-          margin: "0 auto",
-          background: "rgba(15, 23, 42, 0.7)", // Dark transparent slate
-          backdropFilter: "blur(12px)", // Frosted glass effect
-          border: "1px solid rgba(14, 165, 233, 0.25)", // Subtle cyan border
-          borderRadius: "24px",
-          padding: "3rem",
-          boxShadow:
-            "0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 40px rgba(14, 165, 233, 0.08)",
-          position: "relative",
-          overflow: "hidden", 
-        }}
-      >
+      <div className="glass-container">
         {/* Loading Overlay */}
         {loading && (
           <div
@@ -128,20 +103,7 @@ export default function WorkshopRegistrationPage() {
         )}
 
         <header style={{ textAlign: "center", marginBottom: "3rem" }}>
-          <h1
-            style={{
-              fontSize: "2.8rem",
-              fontWeight: "900",
-              textTransform: "uppercase",
-              letterSpacing: "1px",
-              margin: "0 0 10px 0",
-              // Cyan to Blue text gradient
-              background: "linear-gradient(135deg, #00f2fe 0%, #4facfe 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              filter: "drop-shadow(0 2px 10px rgba(0, 242, 254, 0.2))",
-            }}
-          >
+          <h1 className="page-title">
             Workshop Registration
           </h1>
           <p
@@ -187,7 +149,6 @@ export default function WorkshopRegistrationPage() {
                   border: "none",
                   cursor: isValid && !loading ? "pointer" : "not-allowed",
                   transition: "all 0.3s ease",
-                  // Glow and gradient for valid state, muted slate for invalid state
                   background: isValid
                     ? "linear-gradient(135deg, #0ea5e9, #2563eb)"
                     : "#1e293b",
@@ -227,11 +188,66 @@ export default function WorkshopRegistrationPage() {
         </main>
       </div>
 
-      {/* Inline Keyframes for smooth fade-in */}
+      {/* Embedded CSS for layout and responsiveness */}
       <style>{`
         @keyframes fadeIn {
           from { opacity: 0; transform: translateY(10px); }
           to { opacity: 1; transform: translateY(0); }
+        }
+
+        .page-wrapper {
+          min-height: 100vh;
+          padding: 100px 1rem 4rem 1rem;
+          font-family: system-ui, sans-serif;
+          color: #f8fafc;
+          position: relative;
+          z-index: 1;
+          background-size: cover;
+          background-position: center;
+        }
+
+        .glass-container {
+          max-width: 850px;
+          margin: 0 auto;
+          background: rgba(15, 23, 42, 0.7);
+          backdrop-filter: blur(12px);
+          border: 1px solid rgba(14, 165, 233, 0.25);
+          border-radius: 24px;
+          padding: 3rem;
+          box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 40px rgba(14, 165, 233, 0.08);
+          position: relative;
+          overflow: hidden;
+        }
+
+        .page-title {
+          font-size: 2.8rem;
+          font-weight: 900;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          margin: 0 0 10px 0;
+          background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          filter: drop-shadow(0 2px 10px rgba(0, 242, 254, 0.2));
+        }
+
+        /* Mobile specific overrides */
+        @media (max-width: 640px) {
+          .page-wrapper {
+            padding: 80px 0 0 0; /* Removing side paddings to maximize width */
+          }
+          
+          .glass-container {
+            padding: 2rem 1.25rem; /* Drastically reduced inner padding */
+            border-radius: 24px 24px 0 0; /* Remove bottom radius on smaller screens */
+            border-left: none;
+            border-right: none;
+            border-bottom: none;
+          }
+
+          .page-title {
+            font-size: 2rem; /* Scaled down header for mobile */
+          }
         }
       `}</style>
     </div>
