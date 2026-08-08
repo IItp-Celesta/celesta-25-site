@@ -6,7 +6,7 @@ import { motion, useScroll, useSpring, AnimatePresence } from "framer-motion";
 import "./timeline.css";
 const timelineData = [
     {
-        date: "17 August",
+        date: "22-23 August",
         title: "Robotic Exhibition",
         description:
             "Showcasing the future of automation and robotics with cutting-edge demonstrations and interactive exhibits.",
@@ -283,29 +283,29 @@ export default function SoFarPage() {
                 </div>
 
                 {/* Timeline Container */}
-                <div className="relative py-10 w-full max-w-6xl mx-auto">
+                {/* <div className="relative py-10 w-full max-w-6xl mx-auto"> */}
                     {/* Main Central Bus */}
-                    <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-[4px] -translate-x-1/2 flex justify-between z-0">
+                    {/* <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-[4px] -translate-x-1/2 flex justify-between z-0">
                         <div className="w-[1px] h-full bg-white/10 relative overflow-hidden">
                             <motion.div style={{ scaleY }} className="absolute top-0 w-full h-full bg-teal-500/50 origin-top" />
                         </div>
                         <div className="w-[1px] h-full bg-white/10 relative overflow-hidden">
                             <motion.div style={{ scaleY }} className="absolute top-0 w-full h-full bg-blue-500/50 origin-top" />
                         </div>
-                    </div>
+                    </div> */}
 
-                    <div className="space-y-12">
+                    {/* <div className="space-y-12">
                         {timelineData.map((item, index) => (
                             <div key={index} className="relative pl-12 md:pl-0">
-                                {/* Mobile Connector */}
+                                
                                 <div className="md:hidden absolute left-8 top-10 w-8 h-[1px] bg-teal-500/50" />
                                 <div className="md:hidden absolute left-8 top-10 w-2 h-2 -translate-y-1/2 -translate-x-1/2 bg-black border border-teal-500 rounded-full z-10" />
 
                                 <TimelineItem item={item} index={index} />
                             </div>
                         ))}
-                    </div>
-                </div>
+                    </div> */}
+                {/* </div> */}
 
                 <motion.div
                     initial={{ opacity: 0 }}
