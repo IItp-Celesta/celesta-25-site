@@ -339,9 +339,13 @@ export default function RegistrationForm({ register, errors, watch }) {
           >
             Accommodation
           </label>
+
           {isIITP === "no" ? (
             <div
-              style={{ padding: "0.5rem 0", animation: "fadeIn 0.3s ease-out" }}
+              style={{
+                padding: "0.5rem 0",
+                animation: "fadeIn 0.3s ease-out",
+              }}
             >
               <span
                 style={{
@@ -351,7 +355,7 @@ export default function RegistrationForm({ register, errors, watch }) {
                   color: "#94a3b8",
                 }}
               >
-                Do you require accommodation on campus? (+₹199)
+                Do you require accommodation on campus? (+₹199/day)
               </span>
               <div style={{ display: "flex", gap: "2rem" }}>
                 <label
@@ -367,9 +371,10 @@ export default function RegistrationForm({ register, errors, watch }) {
                     type="radio"
                     value="yes"
                     {...register("requireAccommodation")}
-                  />{" "}
+                  />
                   Yes
                 </label>
+
                 <label
                   style={{
                     cursor: "pointer",
@@ -383,12 +388,88 @@ export default function RegistrationForm({ register, errors, watch }) {
                     type="radio"
                     value="no"
                     {...register("requireAccommodation")}
-                  />{" "}
+                  />
                   No
                 </label>
               </div>
+
+              {watch("requireAccommodation") === "yes" && (
+  <div style={{ marginTop: "1rem" }}>
+    <label
+      style={{
+        display: "block",
+        marginBottom: "0.75rem",
+        fontWeight: "600",
+        fontSize: "0.85rem",
+        color: "#38bdf8",
+      }}
+    >
+      Number of Accommodation Days
+    </label>
+
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "1fr 1fr",
+        gap: "0.75rem",
+      }}
+    >
+      <label
+        style={{
+          cursor: "pointer",
+          padding: "0.8rem",
+          border: "1px solid #334155",
+          borderRadius: "8px",
+          display: "flex",
+          alignItems: "center",
+          gap: "0.6rem",
+          color: "#cbd5e1",
+          transition: "all 0.2s ease",
+        }}
+      >
+        <input
+          type="radio"
+          value="1"
+          {...register("accommodationDays")}
+        />
+
+        <span>
+          <strong style={{ color: "#f8fafc" }}>1 Day</strong>
+          <br />
+          <small style={{ color: "#64748b" }}>₹199</small>
+        </span>
+      </label>
+
+      <label
+        style={{
+          cursor: "pointer",
+          padding: "0.8rem",
+          border: "1px solid #334155",
+          borderRadius: "8px",
+          display: "flex",
+          alignItems: "center",
+          gap: "0.6rem",
+          color: "#cbd5e1",
+          transition: "all 0.2s ease",
+        }}
+      >
+        <input
+          type="radio"
+          value="2"
+          {...register("accommodationDays")}
+        />
+
+        <span>
+          <strong style={{ color: "#f8fafc" }}>2 Days</strong>
+          <br />
+          <small style={{ color: "#64748b" }}>₹398</small>
+        </span>
+      </label>
+    </div>
+  </div>
+)}
             </div>
-          ) : isIITP === "yes" ? (
+          ) : (
             <div
               style={{
                 padding: "0.75rem",
@@ -403,16 +484,7 @@ export default function RegistrationForm({ register, errors, watch }) {
             >
               Not Required
             </div>
-          ) : (
-            <span
-              style={{
-                fontSize: "0.9rem",
-                color: "#64748b",
-                fontStyle: "italic",
-              }}
-            >
-              Please specify IIT Patna status to check housing configurations.
-            </span>
+          
           )}
         </div>
       </div>

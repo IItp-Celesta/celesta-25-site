@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import imageCompression from "browser-image-compression";
+import { CheckCircle2, Upload } from "lucide-react";
 
 // Added default empty objects {} to formData and feeSummary to prevent crashes if data takes a second to load
 export default function PaymentSimulator({
@@ -88,8 +89,8 @@ export default function PaymentSimulator({
         email: formData.email,
         phone: formData.phone,
         college: formData.college,
-        cityState: formData.cityState,     
-        rollNumber: formData.rollNumber,   
+        cityState: formData.cityState,
+        rollNumber: formData.rollNumber,
         isIITP: formData.isIITP,
         workshop: formData.workshop,
         requireAccommodation: formData.requireAccommodation,
@@ -148,7 +149,6 @@ export default function PaymentSimulator({
           <p className="text-gray-400 mb-4 text-sm font-medium">
             Scan using any UPI App
           </p>
-
         </div>
 
         {/* RIGHT: Payment Details Form */}
@@ -200,8 +200,20 @@ export default function PaymentSimulator({
                   : "border-white/20 hover:border-cyan-400 hover:bg-cyan-900/10"
               } rounded-xl p-6 text-center cursor-pointer transition-all group flex flex-col items-center justify-center gap-3`}
             >
-              <div className="text-3xl group-hover:-translate-y-1 transition-transform duration-300">
-                {screenshotBase64 ? "✅" : "📤"}
+              <div className="group-hover:-translate-y-1 transition-transform duration-300">
+                {screenshotBase64 ? (
+                  <CheckCircle2
+                    size={32}
+                    strokeWidth={1.8}
+                    className="text-green-400"
+                  />
+                ) : (
+                  <Upload
+                    size={32}
+                    strokeWidth={1.8}
+                    className="text-cyan-400"
+                  />
+                )}
               </div>
               <div className="font-medium text-gray-200">
                 {screenshotBase64
