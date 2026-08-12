@@ -25,13 +25,22 @@ export default function WorkshopRegistrationPage() {
   } = useForm({
     resolver: zodResolver(registrationSchema),
     mode: "onChange",
-    defaultValues: { requireAccommodation: "no", isIITP: "no" },
+    defaultValues: {
+      requireAccommodation: "no",
+      isIITP: "no",
+      accommodationDays: "2",
+    },
   });
 
   const formValues = watch();
   const isIITPStudent = formValues.isIITP === "yes";
-  const accommodationFee =
-    !isIITPStudent && formValues.requireAccommodation === "yes" ? 199 : 0;
+  const accommodationDays =
+    formValues.requireAccommodation === "yes"
+      ? Number(formValues.accommodationDays || 2)
+      : 0;
+
+  const accommodationFee = !isIITPStudent ? accommodationDays * 199 : 0;
+
   const finalAmount = accommodationFee;
 
   const feeSummary = {
@@ -77,7 +86,10 @@ export default function WorkshopRegistrationPage() {
   };
 
   return (
-    <div className="page-wrapper" style={{ backgroundImage: "url('/images/auth-backdrop.png')" }}>
+    <div
+      className="page-wrapper"
+      style={{ backgroundImage: "url('/images/auth-backdrop.png')" }}
+    >
       {/* Premium Glassmorphism Container */}
       <div className="glass-container">
         {/* Loading Overlay */}
@@ -103,9 +115,7 @@ export default function WorkshopRegistrationPage() {
         )}
 
         <header style={{ textAlign: "center", marginBottom: "3rem" }}>
-          <h1 className="page-title">
-            Workshop Registration
-          </h1>
+          <h1 className="page-title">Workshop Registration</h1>
           <p
             style={{
               color: "#94a3b8",

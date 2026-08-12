@@ -45,24 +45,6 @@ export default function Confirmation({
         Registration Successful!
       </h2>
 
-      <p
-        style={{
-          color: "#cbd5e1",
-          fontSize: "1rem",
-          margin: "0 0 2rem 0",
-        }}
-      >
-        A confirmation receipt has been emailed to{" "}
-        <strong
-          style={{
-            color: "#ffffff",
-            textDecoration: "underline",
-          }}
-        >
-          {formData.email}
-        </strong>
-        .
-      </p>
 
       <div
         style={{
