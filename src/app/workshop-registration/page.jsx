@@ -39,7 +39,7 @@ export default function WorkshopRegistrationPage() {
       ? Number(formValues.accommodationDays || 2)
       : 0;
 
-  const accommodationFee = !isIITPStudent ? accommodationDays * 199 : 0;
+  const accommodationFee = !isIITPStudent ? accommodationDays * 249 : 0;
 
   const finalAmount = accommodationFee;
 
