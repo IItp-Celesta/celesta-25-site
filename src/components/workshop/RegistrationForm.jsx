@@ -355,7 +355,7 @@ export default function RegistrationForm({ register, errors, watch }) {
                   color: "#94a3b8",
                 }}
               >
-                Do you require accommodation on campus? (+₹199/day)
+                Do you require accommodation on campus? (+₹249/day)
               </span>
               <div style={{ display: "flex", gap: "2rem" }}>
                 <label
@@ -436,7 +436,7 @@ export default function RegistrationForm({ register, errors, watch }) {
         <span>
           <strong style={{ color: "#f8fafc" }}>1 Day</strong>
           <br />
-          <small style={{ color: "#64748b" }}>₹199</small>
+          <small style={{ color: "#64748b" }}>₹249</small>
         </span>
       </label>
 
@@ -462,7 +462,7 @@ export default function RegistrationForm({ register, errors, watch }) {
         <span>
           <strong style={{ color: "#f8fafc" }}>2 Days</strong>
           <br />
-          <small style={{ color: "#64748b" }}>₹398</small>
+          <small style={{ color: "#64748b" }}>₹498</small>
         </span>
       </label>
     </div>
