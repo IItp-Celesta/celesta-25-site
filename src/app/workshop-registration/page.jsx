@@ -15,7 +15,6 @@ export default function WorkshopRegistrationPage() {
   const [currentStep, setCurrentStep] = useState(1);
   const [registrationId, setRegistrationId] = useState("");
   const [submittedData, setSubmittedData] = useState(null);
-  const [loading, setLoading] = useState(false);
 
   const {
     register,
@@ -34,50 +33,28 @@ export default function WorkshopRegistrationPage() {
 
   const formValues = watch();
   const isIITPStudent = formValues.isIITP === "yes";
+  
+  const workshopFee = isIITPStudent ? 590 : 1416;
+  
   const accommodationDays =
     formValues.requireAccommodation === "yes"
       ? Number(formValues.accommodationDays || 2)
       : 0;
 
   const accommodationFee = !isIITPStudent ? accommodationDays * 249 : 0;
-
   const finalAmount = accommodationFee;
+  
+  const totalAmount = workshopFee + accommodationFee;
 
   const feeSummary = {
     accommodationFee,
     finalAmount,
+    totalAmount, 
   };
 
   const onSubmit = async (data) => {
     setSubmittedData(data);
-
-    if (finalAmount > 0) {
-      setCurrentStep(2);
-    } else {
-      setLoading(true);
-      try {
-        const payload = { ...data, finalAmount: 0 };
-        const response = await fetch("/api/register-workshop", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
-
-        const result = await response.json();
-
-        if (result.success) {
-          setRegistrationId(result.registrationId);
-          setCurrentStep(3); // Go directly to confirmation
-        } else {
-          alert(result.message || "Registration failed.");
-        }
-      } catch (error) {
-        console.error("Submission Error:", error);
-        alert("A server error occurred. Please try again later.");
-      } finally {
-        setLoading(false);
-      }
-    }
+    setCurrentStep(2);
   };
 
   const handlePaymentSuccess = (generatedId) => {
@@ -90,30 +67,7 @@ export default function WorkshopRegistrationPage() {
       className="page-wrapper"
       style={{ backgroundImage: "url('/images/auth-backdrop.png')" }}
     >
-      {/* Premium Glassmorphism Container */}
       <div className="glass-container">
-        {/* Loading Overlay */}
-        {loading && (
-          <div
-            style={{
-              position: "absolute",
-              inset: 0,
-              backgroundColor: "rgba(15, 23, 42, 0.8)",
-              zIndex: 50,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontWeight: "bold",
-              fontSize: "1.2rem",
-              color: "#38bdf8",
-              textTransform: "uppercase",
-              letterSpacing: "2px",
-            }}
-          >
-            Saving Registration...
-          </div>
-        )}
-
         <header style={{ textAlign: "center", marginBottom: "3rem" }}>
           <h1 className="page-title">Workshop Registration</h1>
           <p
@@ -147,7 +101,7 @@ export default function WorkshopRegistrationPage() {
 
               <button
                 type="submit"
-                disabled={!isValid || loading}
+                disabled={!isValid}
                 style={{
                   width: "100%",
                   padding: "1.25rem",
@@ -157,7 +111,7 @@ export default function WorkshopRegistrationPage() {
                   letterSpacing: "1px",
                   borderRadius: "12px",
                   border: "none",
-                  cursor: isValid && !loading ? "pointer" : "not-allowed",
+                  cursor: isValid ? "pointer" : "not-allowed",
                   transition: "all 0.3s ease",
                   background: isValid
                     ? "linear-gradient(135deg, #0ea5e9, #2563eb)"
@@ -166,14 +120,11 @@ export default function WorkshopRegistrationPage() {
                   boxShadow: isValid
                     ? "0 10px 25px -5px rgba(14, 165, 233, 0.4)"
                     : "inset 0 2px 4px rgba(0,0,0,0.2)",
-                  transform: isValid && !loading ? "translateY(-2px)" : "none",
-                  opacity: loading ? 0.7 : 1,
+                  transform: isValid ? "translateY(-2px)" : "none",
                 }}
               >
                 {isValid
-                  ? finalAmount > 0
-                    ? `Proceed to Pay ₹${finalAmount}`
-                    : "Submit Registration"
+                  ? "Proceed to Verification"
                   : "Please Fill All Required Fields"}
               </button>
             </form>
@@ -185,6 +136,7 @@ export default function WorkshopRegistrationPage() {
               onPaymentSuccess={handlePaymentSuccess}
               formData={submittedData}
               feeSummary={feeSummary}
+              onBack={() => setCurrentStep(1)}
             />
           )}
 
@@ -198,13 +150,11 @@ export default function WorkshopRegistrationPage() {
         </main>
       </div>
 
-      {/* Embedded CSS for layout and responsiveness */}
       <style>{`
         @keyframes fadeIn {
           from { opacity: 0; transform: translateY(10px); }
           to { opacity: 1; transform: translateY(0); }
         }
-
         .page-wrapper {
           min-height: 100vh;
           padding: 100px 1rem 4rem 1rem;
@@ -215,7 +165,6 @@ export default function WorkshopRegistrationPage() {
           background-size: cover;
           background-position: center;
         }
-
         .glass-container {
           max-width: 850px;
           margin: 0 auto;
@@ -228,7 +177,6 @@ export default function WorkshopRegistrationPage() {
           position: relative;
           overflow: hidden;
         }
-
         .page-title {
           font-size: 2.8rem;
           font-weight: 900;
@@ -244,19 +192,17 @@ export default function WorkshopRegistrationPage() {
         /* Mobile specific overrides */
         @media (max-width: 640px) {
           .page-wrapper {
-            padding: 80px 0 0 0; /* Removing side paddings to maximize width */
+            padding: 80px 0 0 0;
           }
-          
           .glass-container {
-            padding: 2rem 1.25rem; /* Drastically reduced inner padding */
-            border-radius: 24px 24px 0 0; /* Remove bottom radius on smaller screens */
+            padding: 2rem 1.25rem;
+            border-radius: 24px 24px 0 0;
             border-left: none;
             border-right: none;
             border-bottom: none;
           }
-
           .page-title {
-            font-size: 2rem; /* Scaled down header for mobile */
+            font-size: 2rem;
           }
         }
       `}</style>
