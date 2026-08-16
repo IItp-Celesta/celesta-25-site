@@ -11,6 +11,10 @@ export const registrationSchema = z
     // Form fields
     name: z.string().min(2, "Full name is required"),
     email: z.string().email("Invalid email format"),
+    gender: z.enum(["Male", "Female", "Other"], {
+      errorMap: () => ({ message: "Please select a gender" }),
+    }),
+    
     phone: z.string().regex(/^\d{10}$/, "Must be exactly 10 digits"),
     college: z.string().min(2, "Institute name is required"),
     cityState: z.string().min(2, "City/State is required"),
@@ -26,11 +30,17 @@ export const registrationSchema = z
       .optional(),
 
     requireAccommodation: z.enum(["yes", "no"]).default("no"),
+    accommodationDays: z.string().optional(), // Added since you use this in the form UI
 
+    // Optional pass-through fields
     id: z.string().optional(),
     amountPaid: z.number().optional(),
     upiId: z.string().optional(),
-    screenshot: z.string().optional(),
+    
+    // Updated to match your new payload keys (optional, as they are handled in state)
+    workshopScreenshot: z.any().optional(),
+    accommodationScreenshot: z.any().optional(),
+    aadhaarScreenshot: z.any().optional(),
     registrationTime: z.string().optional(),
   })
   .superRefine((data, ctx) => {
