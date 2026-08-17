@@ -47,9 +47,10 @@ export default function WorkshopRegistrationPage() {
   const totalAmount = workshopFee + accommodationFee;
 
   const feeSummary = {
+    workshopFee,
     accommodationFee,
     finalAmount,
-    totalAmount, 
+    totalAmount,
   };
 
   const onSubmit = async (data) => {
