@@ -1,89 +1,259 @@
 import { NextResponse } from "next/server";
 import { adminFirestore } from "@/lib/firebaseAdmin";
 
-const ALLOWED_COLLECTIONS = ["workshop_registrations"];
+const csvEscape = (value) => {
+  if (value === null || value === undefined) return '""';
+  return `"${String(value)
+    .replace(/\r?\n|\r/g, " ")
+    .replace(/"/g, '""')}"`;
+};
+
+const isAccommodationRequired = (row) => {
+  return (
+    row.requireAccommodation === true ||
+    String(row.requireAccommodation || "").toLowerCase() === "yes"
+  );
+};
+
+const parseDate = (value) => {
+  if (!value) return 0;
+  const time = new Date(value).getTime();
+  return Number.isFinite(time) ? time : 0;
+};
+
+const makeCsvRow = (values) => values.map(csvEscape).join(",");
 
 export async function GET(request) {
   try {
-    const authHeader = request.headers.get("authorization");
-    const secretKey = process.env.ADMIN_PASSWORD;
-
-    if (!authHeader) {
-      return new NextResponse("Unauthorized", { status: 401 });
-    }
-
-    const base64Credentials = authHeader.split(" ")[1];
-    const credentials = Buffer.from(base64Credentials, "base64").toString(
-      "ascii",
-    );
-    const [username, password] = credentials.split(":");
-
-    // Verify Password
-    if (password !== secretKey) {
-      return new NextResponse("Invalid Secret Key", { status: 401 });
-    }
-
     const { searchParams } = new URL(request.url);
-    const collectionName =
-      searchParams.get("collection") || "workshop_registrations";
+    const exportType = searchParams.get("type") || "all";
 
-    if (!ALLOWED_COLLECTIONS.includes(collectionName)) {
+    const allowedTypes = ["all", "reg", "accom"];
+    if (!allowedTypes.includes(exportType)) {
       return NextResponse.json(
-        { error: "Invalid collection" },
-        { status: 403 },
+        {
+          error: `Invalid export type. Use one of: ${allowedTypes.join(", ")}`,
+        },
+        { status: 400 },
       );
     }
 
-    const snapshot = await adminFirestore.collection(collectionName).get();
+    const snapshot = await adminFirestore
+      .collection("workshop_registrations")
+      .get();
 
     if (snapshot.empty) {
-      return NextResponse.json({ message: "No data found" }, { status: 404 });
+      return new NextResponse("", {
+        status: 200,
+        headers: {
+          "Content-Type": "text/csv; charset=utf-8",
+          "Content-Disposition": `attachment; filename="${exportType}_export.csv"`,
+        },
+      });
     }
 
-    const data = [];
-    const headerSet = new Set(["id"]); 
+    let data = [];
 
     snapshot.forEach((doc) => {
-      const rawData = doc.data();
-      const processedRow = { id: doc.id };
+      const row = {
+        id: doc.id,
+        ...doc.data(),
+      };
 
-      for (const [key, value] of Object.entries(rawData)) {
-        headerSet.add(key);
-        if (value && typeof value.toDate === "function") {
-          processedRow[key] = value
-            .toDate()
-            .toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
-        } else if (typeof value === "object" && value !== null) {
-          processedRow[key] = JSON.stringify(value);
-        } else {
-          processedRow[key] = value;
-        }
+      const isLegacy = row.workshopFee === undefined;
+
+      if (isLegacy) {
+        row.accommodationScreenshotUrl = row.screenshotUrl || "";
+        
+        row.workshopScreenshotUrl = "";
+
+        row.accommodationFee = row.amountPaid || 0;
+
+        row.workshopFee = "paid on old portal";
+
+        row.accomTxnId = "";
+        row.workshopTxnId = "";
+        
+        row.upiId = row.upiId || "";
       }
-      data.push(processedRow);
+
+      if (!isLegacy) {
+        const parsedFee = Number(row.workshopFee);
+        row.workshopFee = isNaN(parsedFee) ? row.workshopFee : parsedFee || 0;
+      }
+      row.accommodationFee = Number(row.accommodationFee) || 0;
+
+      if (row.amountPaid === undefined || row.amountPaid === null) {
+        const safeWorkshopFee = typeof row.workshopFee === "number" ? row.workshopFee : 0;
+        row.amountPaid = safeWorkshopFee + (Number(row.accommodationFee) || 0);
+      } else {
+        row.amountPaid = Number(row.amountPaid) || 0;
+      }
+
+      data.push(row);
     });
 
-    const headers = Array.from(headerSet);
-    const csvRows = [headers.join(",")];
+    // Newest first.
+    data.sort(
+      (a, b) =>
+        parseDate(b.registrationTime) -
+        parseDate(a.registrationTime),
+    );
 
-    for (const row of data) {
-      const values = headers.map((header) => {
-        const val = row[header] ?? "";
-        return `"${String(val).replace(/"/g, '""')}"`;
-      });
-      csvRows.push(values.join(","));
+    let headers = [];
+    const csvRows = [];
+
+    if (exportType === "accom") {
+      data = data.filter(isAccommodationRequired);
+      headers = [
+        "ID",
+        "Time",
+        "Name",
+        "Gender",
+        "Email",
+        "Phone",
+        "College",
+        "Accom Fee Paid",
+        "Sender UPI ID",
+        "Accom Txn ID",
+        "Accom Screenshot",
+        "Aadhaar",
+      ];
+      csvRows.push(makeCsvRow(headers));
+
+      for (const row of data) {
+        csvRows.push(
+          makeCsvRow([
+            row.id,
+            row.registrationTime || "",
+            row.name || "",
+            row.gender || "",
+            row.email || "",
+            row.phone || "",
+            row.college || "",
+            row.accommodationFee,
+            row.upiId || "",
+            row.accomTxnId || "",
+            row.accommodationScreenshotUrl || "",
+            row.aadhaarUrl || "",
+          ]),
+        );
+      }
     }
 
-    return new NextResponse(csvRows.join("\n"), {
+    else if (exportType === "reg") {
+      headers = [
+        "ID",
+        "Time",
+        "Name",
+        "Gender",
+        "Email",
+        "Phone",
+        "College",
+        "Track",
+        "Is IITP",
+        "Roll Number",
+        "Reg Fee Paid",
+        "Sender UPI ID",
+        "Reg Txn ID",
+        "Reg Screenshot",
+      ];
+      csvRows.push(makeCsvRow(headers));
+
+      for (const row of data) {
+        csvRows.push(
+          makeCsvRow([
+            row.id,
+            row.registrationTime || "",
+            row.name || "",
+            row.gender || "",
+            row.email || "",
+            row.phone || "",
+            row.college || "",
+            row.workshop || "",
+            row.isIITP ? "Yes" : "No",
+            row.rollNumber || "",
+            row.workshopFee,
+            row.upiId || "",
+            row.workshopTxnId || "",
+            row.workshopScreenshotUrl || "",
+          ]),
+        );
+      }
+    }
+    else {
+      headers = [
+        "ID",
+        "Time",
+        "Name",
+        "Gender",
+        "Email",
+        "Phone",
+        "College",
+        "City/State",
+        "Track",
+        "Is IITP",
+        "Roll Number",
+        "Reg Fee",
+        "Accom Fee",
+        "Total Fee",
+        "Sender UPI ID",
+        "Reg Txn ID",
+        "Accom Txn ID",
+        "Reg Screenshot",
+        "Accom Screenshot",
+        "Aadhaar",
+      ];
+      csvRows.push(makeCsvRow(headers));
+
+      for (const row of data) {
+        csvRows.push(
+          makeCsvRow([
+            row.id,
+            row.registrationTime || "",
+            row.name || "",
+            row.gender || "",
+            row.email || "",
+            row.phone || "",
+            row.college || "",
+            row.cityState || "",
+            row.workshop || "",
+            row.isIITP ? "Yes" : "No",
+            row.rollNumber || "",
+            row.workshopFee,
+            row.accommodationFee,
+            row.amountPaid,
+            row.upiId || "",
+            row.workshopTxnId || "",
+            row.accomTxnId || "",
+            row.workshopScreenshotUrl || "",
+            row.accommodationScreenshotUrl || "",
+            row.aadhaarUrl || "",
+          ]),
+        );
+      }
+    }
+
+    const csv = csvRows.join("\r\n");
+
+    return new NextResponse(csv, {
       status: 200,
       headers: {
-        "Content-Type": "text/csv",
-        "Content-Disposition": `attachment; filename="${collectionName}_export.csv"`,
+        "Content-Type": "text/csv; charset=utf-8",
+        "Content-Disposition": `attachment; filename="${exportType}_export.csv"`,
+        "Cache-Control": "no-store",
       },
     });
   } catch (error) {
-    console.error("Export Error:", error);
+    console.error("CSV export failed:", error);
     return NextResponse.json(
-      { error: "Failed to export data" },
+      {
+        error: "Failed to export data",
+        message:
+          process.env.NODE_ENV === "development"
+            ? error?.message
+            : undefined,
+      },
       { status: 500 },
     );
   }
