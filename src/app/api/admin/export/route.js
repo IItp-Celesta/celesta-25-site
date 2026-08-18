@@ -69,7 +69,7 @@ export async function GET(request) {
 
         row.accommodationFee = row.amountPaid || 0;
 
-        row.workshopFee = "paid on old portal";
+        row.workshopFee = "";
 
         row.accomTxnId = "";
         row.workshopTxnId = "";
