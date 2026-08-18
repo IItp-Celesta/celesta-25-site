@@ -8,6 +8,11 @@ const csvEscape = (value) => {
     .replace(/"/g, '""')}"`;
 };
 
+const csvText = (value) => {
+  if (value === null || value === undefined || value === "") return "";
+  return `="${String(value)}"`;
+};
+
 const isAccommodationRequired = (row) => {
   return (
     row.requireAccommodation === true ||
@@ -48,6 +53,7 @@ export async function GET(request) {
         headers: {
           "Content-Type": "text/csv; charset=utf-8",
           "Content-Disposition": `attachment; filename="${exportType}_export.csv"`,
+          "Cache-Control": "no-store",
         },
       });
     }
@@ -79,7 +85,7 @@ export async function GET(request) {
 
       if (!isLegacy) {
         const parsedFee = Number(row.workshopFee);
-        row.workshopFee = isNaN(parsedFee) ? row.workshopFee : parsedFee || 0;
+        row.workshopFee = Number.isNaN(parsedFee) ? row.workshopFee : parsedFee || 0;
       }
       row.accommodationFee = Number(row.accommodationFee) || 0;
 
@@ -129,11 +135,11 @@ export async function GET(request) {
             row.name || "",
             row.gender || "",
             row.email || "",
-            row.phone || "",
+            csvText(row.phone),
             row.college || "",
             row.accommodationFee,
-            row.upiId || "",
-            row.accomTxnId || "",
+            csvText(row.upiId),
+            csvText(row.accomTxnId),
             row.accommodationScreenshotUrl || "",
             row.aadhaarUrl || "",
           ]),
@@ -168,14 +174,14 @@ export async function GET(request) {
             row.name || "",
             row.gender || "",
             row.email || "",
-            row.phone || "",
+            csvText(row.phone),
             row.college || "",
             row.workshop || "",
             row.isIITP ? "Yes" : "No",
-            row.rollNumber || "",
+            csvText(row.rollNumber),
             row.workshopFee,
-            row.upiId || "",
-            row.workshopTxnId || "",
+            csvText(row.upiId),
+            csvText(row.workshopTxnId),
             row.workshopScreenshotUrl || "",
           ]),
         );
@@ -214,18 +220,18 @@ export async function GET(request) {
             row.name || "",
             row.gender || "",
             row.email || "",
-            row.phone || "",
+            csvText(row.phone),
             row.college || "",
             row.cityState || "",
             row.workshop || "",
             row.isIITP ? "Yes" : "No",
-            row.rollNumber || "",
+            csvText(row.rollNumber),
             row.workshopFee,
             row.accommodationFee,
             row.amountPaid,
-            row.upiId || "",
-            row.workshopTxnId || "",
-            row.accomTxnId || "",
+            csvText(row.upiId),
+            csvText(row.workshopTxnId),
+            csvText(row.accomTxnId),
             row.workshopScreenshotUrl || "",
             row.accommodationScreenshotUrl || "",
             row.aadhaarUrl || "",
