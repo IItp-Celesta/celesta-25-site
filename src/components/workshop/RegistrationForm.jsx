@@ -277,7 +277,7 @@ export default function RegistrationForm({ register, errors, watch }) {
               Artificial Intelligence
             </option>
             <option value="Ethical Hacking">Ethical Hacking</option>
-            <option value="Drone Technology">Drone Technology</option>
+            <option value="Drone Technology" disabled>Drone Technology (Seats Full)</option>
           </select>
           {errors.workshop && (
             <span
