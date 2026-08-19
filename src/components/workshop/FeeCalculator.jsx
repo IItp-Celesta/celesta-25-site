@@ -12,15 +12,31 @@ export default function FeeCalculator({ formValues, feeSummary }) {
       </h3>
 
       <div className="flex flex-col gap-4">
-        <div className="flex justify-between text-slate-300">
-          <span>Registration Fee ({userType})</span>
-          <span className="font-bold text-slate-50">₹ {workshopFee}</span>
+        <div className="flex justify-between text-slate-300 items-center">
+          <div className="flex flex-col">
+            <span>Registration Fee ({userType})</span>
+            {!isIITP && (
+              <span className="text-xs text-emerald-400 font-medium mt-0.5">
+                Special Discount Applied
+              </span>
+            )}
+          </div>
+          <div className="flex items-center gap-2">
+            {!isIITP && (
+              <span className="line-through text-slate-500 text-sm">₹1416</span>
+            )}
+            <span className="font-bold text-slate-50 text-lg">
+              ₹ {workshopFee}
+            </span>
+          </div>
         </div>
 
         {accommodationFee > 0 && (
           <div className="flex justify-between text-slate-300">
             <span>Accommodation Fee ({formValues.accommodationDays} Days)</span>
-            <span className="font-bold text-slate-50">+ ₹ {accommodationFee}</span>
+            <span className="font-bold text-slate-50">
+              + ₹ {accommodationFee}
+            </span>
           </div>
         )}
       </div>
@@ -29,8 +45,12 @@ export default function FeeCalculator({ formValues, feeSummary }) {
 
       <div className="flex justify-between items-center">
         <div className="flex flex-col">
-          <span className="text-xl font-extrabold text-slate-50">Final Total</span>
-          <span className="text-xs text-slate-400">(Split payments on next step)</span>
+          <span className="text-xl font-extrabold text-slate-50">
+            Final Total
+          </span>
+          <span className="text-xs text-slate-400">
+            (Split payments on next step)
+          </span>
         </div>
         <span className="text-2xl font-black text-sky-500 drop-shadow-[0_0_15px_rgba(14,165,233,0.4)]">
           ₹ {totalAmount}
