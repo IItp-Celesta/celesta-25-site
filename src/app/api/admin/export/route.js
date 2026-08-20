@@ -102,8 +102,8 @@ export async function GET(request) {
     // Newest first.
     data.sort(
       (a, b) =>
-        parseDate(b.registrationTime) -
-        parseDate(a.registrationTime),
+        parseDate(a.registrationTime) -
+        parseDate(b.registrationTime),
     );
 
     let headers = [];

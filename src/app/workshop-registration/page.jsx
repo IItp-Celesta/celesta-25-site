@@ -34,7 +34,7 @@ export default function WorkshopRegistrationPage() {
   const formValues = watch();
   const isIITPStudent = formValues.isIITP === "yes";
   
-  const workshopFee = isIITPStudent ? 590 : 1416;
+  const workshopFee = isIITPStudent ? 590 : 999;
   
   const accommodationDays =
     formValues.requireAccommodation === "yes"
