@@ -108,7 +108,7 @@ export default function Confirmation({
                 fontWeight: "500",
               }}
             >
-              {formData.fullName}
+              {formData.name}
             </span>
           </div>
 
@@ -158,7 +158,7 @@ export default function Confirmation({
           >
             <span style={{ color: "#f8fafc" }}>Amount Processed:</span>
             <span style={{ color: "#4ade80" }}>
-              ₹{feeSummary.finalAmount}
+              ₹{feeSummary.totalAmount}
             </span>
           </div>
         </div>

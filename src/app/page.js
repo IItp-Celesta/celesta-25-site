@@ -372,50 +372,21 @@ export default function Home() {
           </div> */}
         </section>
 
-        <section className="max-w-7xl mx-auto mb-16 reveal-section">
+        <section className="w-full max-w-[900px] mx-auto mb-16 reveal-section">
           <h2 className="text-white text-4xl uppercase mb-6 text-center state-wide">
             CELESTA: Glimpse
           </h2>
 
-          {/* Added 'relative' and 'group' here so the button can detect hover */}
-          <div className={`${styles.glimpseFrame} mx-auto mb-8 relative group`}>
-            <video
-              ref={videoRef}
-              className="w-full object-cover"
-              autoPlay
-              muted={isMuted}
-              loop
-              playsInline
-            >
-              <source src="/videos/glimpse.mp4" type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
-
-            <button
-              onClick={toggleAudio}
-              className="
-          absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
-          opacity-0 group-hover:opacity-100 transition-opacity duration-300
-          bg-black/60 hover:bg-black/80 text-white px-5 py-3 rounded-full 
-          flex items-center gap-2 backdrop-blur-sm cursor-pointer scale-110
-        "
-            >
-              {isMuted ? (
-                <>
-                  <span className="text-lg">🔇</span>{" "}
-                  <span className="text-sm font-semibold tracking-wide">
-                    UNMUTE
-                  </span>
-                </>
-              ) : (
-                <>
-                  <span className="text-lg">🔊</span>{" "}
-                  <span className="text-sm font-semibold tracking-wide">
-                    MUTE
-                  </span>
-                </>
-              )}
-            </button>
+          <div className="relative w-full aspect-video rounded-xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)] mx-auto mb-8 bg-black">
+            <iframe 
+              className="absolute top-0 left-0 w-full h-full"
+              src="https://www.youtube.com/embed/5HM98tMfYdo?autoplay=1&mute=1&loop=1&playlist=5HM98tMfYdo" 
+              title="CELESTA Glimpse YouTube video" 
+              frameBorder="0" 
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+              referrerPolicy="strict-origin-when-cross-origin" 
+              allowFullScreen>
+            </iframe>
           </div>
         </section>
       </div>
