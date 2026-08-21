@@ -15,6 +15,7 @@ export default function WorkshopRegistrationPage() {
   const [currentStep, setCurrentStep] = useState(1);
   const [registrationId, setRegistrationId] = useState("");
   const [submittedData, setSubmittedData] = useState(null);
+  const [appliedCoupon, setAppliedCoupon] = useState({ code: null, price: null });
 
   const {
     register,
@@ -33,9 +34,56 @@ export default function WorkshopRegistrationPage() {
 
   const formValues = watch();
   const isIITPStudent = formValues.isIITP === "yes";
-  
-  const workshopFee = isIITPStudent ? 590 : 999;
-  
+  const couponCode = formValues.couponCode?.trim().toUpperCase();
+
+  const handleVerifyCoupon = async () => {
+  if (!couponCode) {
+    setAppliedCoupon({ code: null, price: null });
+    return { valid: false, message: "Please enter a coupon code." };
+  }
+
+  try {
+    const res = await fetch("/api/register-workshop/validate-coupon", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ code: couponCode }),
+    });
+
+    const data = await res.json();
+
+    if (data.valid) {
+      setAppliedCoupon({
+        code: couponCode,
+        price: data.price,
+      });
+
+      return {
+        valid: true,
+        message: `Coupon applied! Workshop fee reduced to ₹${data.price}.`,
+      };
+    }
+
+    setAppliedCoupon({ code: null, price: null });
+
+    return {
+      valid: false,
+      message: data.message || "Invalid coupon code.",
+    };
+  } catch (error) {
+    setAppliedCoupon({ code: null, price: null });
+
+    return {
+      valid: false,
+      message: "Unable to verify coupon. Please try again.",
+    };
+  }
+};
+
+  let workshopFee = isIITPStudent ? 590 : 999;
+  if (!isIITPStudent && appliedCoupon.price && appliedCoupon.code === couponCode) {
+    workshopFee = appliedCoupon.price;
+  }
+
   const accommodationDays =
     formValues.requireAccommodation === "yes"
       ? Number(formValues.accommodationDays || 2)
@@ -43,7 +91,7 @@ export default function WorkshopRegistrationPage() {
 
   const accommodationFee = !isIITPStudent ? accommodationDays * 249 : 0;
   const finalAmount = accommodationFee;
-  
+
   const totalAmount = workshopFee + accommodationFee;
 
   const feeSummary = {
@@ -97,6 +145,7 @@ export default function WorkshopRegistrationPage() {
                 register={register}
                 errors={errors}
                 watch={watch}
+                onVerifyCoupon={handleVerifyCoupon}
               />
               <FeeCalculator formValues={formValues} feeSummary={feeSummary} />
 

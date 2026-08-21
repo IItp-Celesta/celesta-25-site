@@ -122,6 +122,8 @@ export default function PaymentSimulator({ onPaymentSuccess, formData = {}, feeS
         if (value !== undefined && value !== null) submitData.append(key, value);
       });
 
+      if (formData.couponCode) {
+      submitData.append("couponCode", formData.couponCode);}
       submitData.append("id", crypto.randomUUID());
       submitData.append("workshopFee", feeSummary.workshopFee);
       submitData.append("accommodationFee", feeSummary.accommodationFee);
