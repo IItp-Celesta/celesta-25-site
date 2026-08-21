@@ -130,8 +130,17 @@ export default function WorkshopRegistrationPage() {
             Celesta 2026 Tech Workshop Series (22 & 23 August)
           </p>
         </header>
-
+        
         <main style={{ animation: "fadeIn 0.5s ease-out" }}>
+        <div style={{ padding: "2rem", backgroundColor: "[#0e121f]", borderRadius: "12px", border: "1px solid rgba(239, 68, 68, 0.3)" }}>
+            <h2 style={{ color: "#ef4444", fontSize: "2rem", fontWeight: "800", marginBottom: "1rem", textTransform: "uppercase", letterSpacing: "1px" }}>
+              Registrations Closed
+            </h2>
+            <p style={{ color: "#94a3b8", fontSize: "1.1rem", lineHeight: "1.6" }}>
+              Thank you for the overwhelming response! The registrations for the Celesta 2026 Tech Workshop are now officially closed. 
+            </p>
+          </div>
+          {/*
           {currentStep === 1 && (
             <form
               onSubmit={handleSubmit(onSubmit)}
@@ -197,6 +206,7 @@ export default function WorkshopRegistrationPage() {
               feeSummary={feeSummary}
             />
           )}
+          */}
         </main>
       </div>
 
