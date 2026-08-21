@@ -70,27 +70,25 @@ export async function GET(request) {
 
       if (isLegacy) {
         row.accommodationScreenshotUrl = row.screenshotUrl || "";
-        
         row.workshopScreenshotUrl = "";
-
         row.accommodationFee = row.amountPaid || 0;
-
         row.workshopFee = "";
-
         row.accomTxnId = "";
         row.workshopTxnId = "";
-        
         row.upiId = row.upiId || "";
       }
 
       if (!isLegacy) {
         const parsedFee = Number(row.workshopFee);
-        row.workshopFee = Number.isNaN(parsedFee) ? row.workshopFee : parsedFee || 0;
+        row.workshopFee = Number.isNaN(parsedFee)
+          ? row.workshopFee
+          : parsedFee || 0;
       }
       row.accommodationFee = Number(row.accommodationFee) || 0;
 
       if (row.amountPaid === undefined || row.amountPaid === null) {
-        const safeWorkshopFee = typeof row.workshopFee === "number" ? row.workshopFee : 0;
+        const safeWorkshopFee =
+          typeof row.workshopFee === "number" ? row.workshopFee : 0;
         row.amountPaid = safeWorkshopFee + (Number(row.accommodationFee) || 0);
       } else {
         row.amountPaid = Number(row.amountPaid) || 0;
@@ -99,11 +97,8 @@ export async function GET(request) {
       data.push(row);
     });
 
-    // Newest first.
     data.sort(
-      (a, b) =>
-        parseDate(a.registrationTime) -
-        parseDate(b.registrationTime),
+      (a, b) => parseDate(a.registrationTime) - parseDate(b.registrationTime),
     );
 
     let headers = [];
@@ -111,6 +106,7 @@ export async function GET(request) {
 
     if (exportType === "accom") {
       data = data.filter(isAccommodationRequired);
+
       headers = [
         "ID",
         "Time",
@@ -145,9 +141,7 @@ export async function GET(request) {
           ]),
         );
       }
-    }
-
-    else if (exportType === "reg") {
+    } else if (exportType === "reg") {
       headers = [
         "ID",
         "Time",
@@ -186,8 +180,7 @@ export async function GET(request) {
           ]),
         );
       }
-    }
-    else {
+    } else {
       headers = [
         "ID",
         "Time",
@@ -256,9 +249,7 @@ export async function GET(request) {
       {
         error: "Failed to export data",
         message:
-          process.env.NODE_ENV === "development"
-            ? error?.message
-            : undefined,
+          process.env.NODE_ENV === "development" ? error?.message : undefined,
       },
       { status: 500 },
     );

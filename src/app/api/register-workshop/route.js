@@ -48,6 +48,10 @@ export async function POST(request) {
       [process.env.COUPON_899]: 899,
     };
 
+    if (isExternal && couponCode && VALID_COUPONS[couponCode]) {
+      expectedWorkshopFee = VALID_COUPONS[couponCode];
+    }
+
     const expectedAccommodationFee =
       requireAccommodation && isExternal ? accommodationDays * 249 : 0;
 
@@ -121,16 +125,13 @@ export async function POST(request) {
         isIITP: !isExternal,
         requireAccommodation,
         accommodationDays: formData.get("accommodationDays") || "0",
-
         workshopFee: expectedWorkshopFee,
         accommodationFee: expectedAccommodationFee,
         amountPaid: expectedTotalAmount,
         couponCode,
-
         upiId: formData.get("upiId") || "",
         workshopTxnId: formData.get("workshopTxnId") || "",
         accomTxnId: formData.get("accomTxnId") || "",
-
         workshopScreenshotUrl,
         accommodationScreenshotUrl,
         aadhaarUrl,
