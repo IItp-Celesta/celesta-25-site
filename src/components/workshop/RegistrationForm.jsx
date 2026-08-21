@@ -2,11 +2,18 @@
 
 import { useState } from "react";
 
-export default function RegistrationForm({ register, errors, watch }) {
+export default function RegistrationForm({
+  register,
+  errors,
+  watch,
+  onVerifyCoupon,
+}) {
   const [showPrograms, setShowPrograms] = useState(false);
+  const [couponStatus, setCouponStatus] = useState(null);
   const isIITP = watch("isIITP");
   const emailValue = watch("email");
   const phoneValue = watch("phone"); // Updated to match backend
+  const couponField = register("couponCode");
 
   const isEmailValid = emailValue && !errors.email;
   const isPhoneValid = phoneValue && !errors.phone;
@@ -277,7 +284,9 @@ export default function RegistrationForm({ register, errors, watch }) {
               Artificial Intelligence
             </option>
             <option value="Ethical Hacking">Ethical Hacking</option>
-            <option value="Drone Technology" disabled>Drone Technology (Seats Full)</option>
+            <option value="Drone Technology" disabled>
+              Drone Technology (Seats Full)
+            </option>
           </select>
           {errors.workshop && (
             <span
@@ -617,6 +626,80 @@ export default function RegistrationForm({ register, errors, watch }) {
             </div>
           )}
         </div>
+        {/* COUPON CODE */}
+        {/* COUPON */}
+{isIITP === "no" && (
+  <div style={{ marginTop: "0.25rem" }}>
+    <label
+      style={{
+        display: "block",
+        marginBottom: "0.4rem",
+        fontSize: "0.85rem",
+        fontWeight: "600",
+        color: "#cbd5e1",
+      }}
+    >
+      Coupon Code
+    </label>
+
+    <div style={{ display: "flex", gap: "0.4rem" }}>
+      <input
+        type="text"
+        {...couponField}
+        placeholder="Enter code"
+        onChange={(e) => {
+          couponField.onChange(e);
+          setCouponStatus(null);
+        }}
+        style={{
+          ...inputStyle(false),
+          flex: 1,
+        }}
+      />
+
+      <button
+        type="button"
+        onClick={async () => {
+          try {
+            const result = await onVerifyCoupon();
+
+            setCouponStatus({
+              valid: result?.valid === true,
+              message:
+                result?.message ||
+                (result?.valid ? "Applied" : "Invalid"),
+            });
+          } catch {
+            setCouponStatus({
+              valid: false,
+              message: "Invalid",
+            });
+          }
+        }}
+        style={{
+          padding: "0 0.9rem",
+          color: "#fff",
+          fontWeight: "600",
+          cursor: "pointer",
+        }}
+      >
+        Apply
+      </button>
+    </div>
+
+    {couponStatus && (
+      <div
+        style={{
+          marginTop: "0.3rem",
+          fontSize: "0.75rem",
+          color: couponStatus.valid ? "#4ade80" : "#f87171",
+        }}
+      >
+        {couponStatus.message}
+      </div>
+    )}
+  </div>
+)}
       </div>
     </div>
   );

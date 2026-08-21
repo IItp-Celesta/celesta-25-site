@@ -24,6 +24,8 @@ export const registrationSchema = z
     requireAccommodation: z.enum(["yes", "no"]).default("no"),
     accommodationDays: z.string().optional(),
 
+    couponCode: z.string().optional(),
+
     id: z.string().optional(),
     workshopFee: z.number().optional(),
     accommodationFee: z.number().optional(),
