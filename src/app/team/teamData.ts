@@ -64,6 +64,8 @@ export const teamData: TeamMember[] = [
     { id: "creative", name: "Creative & Design", title: "The Visual Architects", parentId: "Committees" },
     { id: "hima", name: "Hima Sai Chandana", title: "Coordinator", parentId: "creative", image: "/team-images/hima.jpg", linkedin: "#", x: "https://www.instagram.com/himasaichandana" },
     { id: "kunal", name: "Kunal Deore", title: "Coordinator", parentId: "creative", image: "/team-images/kunal.jpeg", linkedin: "https://www.linkedin.com/in/krbd04/", x: "https://www.instagram.com/k.deore04/" },
+    { id: "avi", name: "Avi Bharti", title: "Coordinator", parentId: "creative", image: "/team-images/avi.jpeg", linkedin: "https://www.linkedin.com/in/avi-bharti-029b1833b", x: "https://www.instagram.com/ave08_6/" },
+    
 
     // Hospitality & Logistics
     { id: "hospitality", name: "Hospitality & Logistics", title: "The Ambassadors of Welcome", parentId: "Committees" },
